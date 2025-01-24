@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normal User Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Custom CSS -->
+    <style>
+        .header-section {
+            background-color: #007bff;
+            color: white;
+            padding: 20px 0;
+        }
+        .header-section h1 {
+            animation: slideIn 1.2s ease-out;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .footer-section {
+            background-color: #343a40;
+            color: white;
+            padding: 15px 0;
+        }
+        .footer-section a {
+            color: #ffc107;
+        }
+        .welcome-message {
+            margin: 50px 0;
+            text-align: center;
+            animation: fadeIn 1.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="header-section text-center">
+        <div class="container">
+            <h1><i class="fas fa-user-circle"></i> Welcome, {{ user.username }}!</h1>
+            <p>Your personalized dashboard</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container welcome-message">
+        <p>This is your personal page. Explore the features available just for you!</p>
+    </div>
+
+    <!-- Footer Section -->
+    <footer class="footer-section text-center">
+        <div class="container">
+            <p>&copy; 2025 Your Website. All Rights Reserved. | <a href="#">Privacy Policy</a></p>
+            <p>
+                <a href="#" class="mr-2"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="mr-2"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="mr-2"><i class="fab fa-linkedin-in"></i></a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap and jQuery Scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

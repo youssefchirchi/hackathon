@@ -12,9 +12,29 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 AUTH_USER_MODEL = 'users.CustomUser'
+
+
+PAYPAL_MODE = 'sandbox'  # Set to 'live' for production
+PAYPAL_CLIENT_ID = 'AV0xdA0cbp9neWw0KnKBE6gWnvz9ErofFU8q20h8XwLYpV2MpUQAQs9IvMaaz5XDxIsBlfUp2P6-dnCj'
+PAYPAL_CLIENT_SECRET = 'ECmWfIPx8A-Nii3GuKGF8s4u44s70IRz6grvRaEYboxJcVRLimcgQXh-c3_PLCwKr-_kbkU7pkv6Jo90'
+
+# Stripe API keys
+STRIPE_PUBLIC_KEY = 'pk_test_51QOk1KI0zbrS2Z4lpbs08CCRHy4zWq4fYUDrAzyxUqhJsEr6kxWVoWOfBTWPG7OgatzA5RsMW69gdeArZGbPKgkE007V5x0nw5'
+STRIPE_SECRET_KEY = 'sk_test_51QOk1KI0zbrS2Z4lG6yqJtszuiOJ8pi1k55VIXD64RkERE8ky9B9c37B17AYBMVx95krPSx4NSMQXZrqyBkhgcZQ00uRW6fczG'
+
+
+
+
+# Quick-start development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'django-insecure-d3=ngp5u1@td5y6wm9itwaqd2s^dq@_0)k0dr)by#jwz*=h!e2'
 
 
 # Quick-start development settings - unsuitable for production
@@ -119,9 +139,26 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
-
+# Add these at the bottom of the file
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'myapp', 'static')
+]
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'raif.guizani@esprit.tn'  # Remplacez par votre email
+EMAIL_HOST_PASSWORD = '221JMT2742Raef'  # Remplacez par un mot de passe d'application
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

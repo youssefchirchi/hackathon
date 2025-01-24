@@ -21,7 +21,7 @@ class File(models.Model):
         (PRESCRIPTION, 'Prescription'),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='files')
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='files')
     file_type = models.CharField(max_length=20, choices=FILE_TYPES, default=DOCUMENT)
     file = models.FileField(upload_to='user_files/')  # Store uploaded files in 'media/user_files/' directory
     file_path = models.CharField(max_length=255, blank=True, null=True)  # Optional field to store a file link or path

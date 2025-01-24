@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Assistant</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #2196F3;
+            --light-blue: #E3F2FD;
+            --dark-blue: #1565C0;
+            --white: #FFFFFF;
+        }
+
+        body {
+            background-color: var(--light-blue);
+            font-family: 'Arial', sans-serif;
+        }
+
+        .chat-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: var(--white);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 20px;
+            text-align: center;
+        }
+
+        #chatbox {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: var(--white);
+        }
+
+        #chat-history {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-message, .bot-message {
+            max-width: 80%;
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 15px;
+            clear: both;
+        }
+
+        .bot-message {
+            background-color: var(--light-blue);
+            align-self: flex-start;
+        }
+
+        .user-message {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            align-self: flex-end;
+        }
+
+        .chat-input-area {
+            display: flex;
+            padding: 20px;
+            background-color: var(--light-blue);
+        }
+
+        #user-input {
+            flex-grow: 1;
+            margin-right: 10px;
+            border: 2px solid var(--primary-blue);
+        }
+
+        #send-button {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            transition: all 0.3s ease;
+        }
+
+        #send-button:hover {
+            background-color: var(--dark-blue);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="chat-container">
+            <div class="chat-header">
+                <h2 class="mb-0">Chatbot Assistant</h2>
+            </div>
+            
+            <div id="chatbox">
+                <div id="chat-history">
+                    <div class="bot-message">
+                        Bonjour! Comment puis-je vous aider aujourd'hui ?
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="user-input" class="form-control" placeholder="Entrez votre message...">
+                <button id="send-button" class="btn btn-primary">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    
+    <script>
+        // Pass chatbot data from Django template
+        const chatbotData = {{ chatbot_data|safe }};
+
+        $(document).ready(function() {
+            function addMessage(message, type) {
+                const messageElement = $(`<div class="${type}-message">`).text(message);
+                $('#chat-history').append(messageElement);
+                $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+            }
+
+            function findBestResponse(userMessage) {
+                // Implement fuzzy matching or more advanced logic
+                const normalizedMessage = userMessage.toLowerCase();
+                
+                for (let item of chatbotData) {
+                    const normalizedQuestion = item.question.toLowerCase();
+                    if (normalizedMessage.includes(normalizedQuestion)) {
+                        return item.response;
+                    }
+                }
+                
+                return "Je n'ai pas compris votre message. Pouvez-vous préciser?";
+            }
+
+            function sendMessage() {
+                const userMessage = $('#user-input').val().trim();
+                if (userMessage === '') return;
+
+                // Add user message
+                addMessage(userMessage, 'user');
+                
+                // Find and add bot response
+                const botResponse = findBestResponse(userMessage);
+                
+                // Add bot message
+                setTimeout(() => {
+                    addMessage(botResponse, 'bot');
+                }, 1000);
+
+                // Clear input
+                $('#user-input').val('');
+            }
+
+            // Send message on button click
+            $('#send-button').click(sendMessage);
+
+            // Send message on Enter key
+            $('#user-input').keypress(function(e) {
+                if (e.which === 13) {
+                    sendMessage();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
