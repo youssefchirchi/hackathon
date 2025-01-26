@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import login_view, logout_view, normal_user_dashboard, welcome_page, signup_page, payment_success, payment_cancel, modele1, modele2, modele3,chatbot
+from .views import login_view, logout_view, normal_user_dashboard, welcome_page, send_message, signup_page, payment_success, payment_cancel, modele1, modele2, modele3,chatbot
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -20,5 +20,8 @@ urlpatterns = [
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
     path('chatbot/', chatbot, name='chatbot'),
+    path("send_message/", send_message, name="send_message"),
+
+
 
 ]

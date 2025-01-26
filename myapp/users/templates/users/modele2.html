@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Summarization</title>
+    <style>
+        :root {
+            /* Color Palette */
+            --primary-blue: #2196F3;        /* Vibrant professional blue */
+            --white: #FFFFFF;               /* Pure white */
+            --text-blue: #1565C0;           /* Deep blue for text */
+            --light-blue: #E3F2FD;          /* Light blue accent */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text-blue);
+            background-color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: var(--white);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--text-blue);
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            color: var(--text-blue);
+            font-weight: 600;
+        }
+
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid var(--primary-blue);
+            border-radius: 5px;
+            background-color: var(--light-blue);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        button {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--text-blue);
+            transform: translateY(-2px);
+        }
+
+        .summary-container, .error-message {
+            margin-top: 30px;
+        }
+
+        .summary {
+            background-color: var(--light-blue);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .error-message {
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text Summarization Tool</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <label for="text_file">Upload a text file:</label>
+            <input type="file" name="text_file" accept=".txt" required>
+            <div class="button-container">
+                <button type="submit">Generate Summary</button>
+                <button type="button" onclick="window.location.href='{% url 'normal_user_dashboard' %}'">Home</button>
+            </div>
+        </form>
+
+        {% if summary %}
+            <div class="summary-container">
+                <h2>Generated Summary:</h2>
+                <div class="summary">
+                    <p>{{ summary }}</p>
+                </div>
+            </div>
+        {% elif error %}
+            <div class="error-message">
+                <p>{{ error }}</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+Medical Report: Patient Summary
+
+Patient Name: John Doe
+Age: 54
+Sex: Male
+Date of Admission: January 15, 2025
+Date of Discharge: January 22, 2025
+
+Reason for Admission
+The patient was admitted to the hospital with complaints of chest pain radiating to the left arm, shortness of breath, and dizziness. Symptoms started suddenly while climbing stairs. The patient has a history of hypertension, type 2 diabetes mellitus, and high cholesterol.
+
+Medical History
+Hypertension: Diagnosed 12 years ago; controlled with medication (Lisinopril 10mg daily).
+Type 2 Diabetes Mellitus: Diagnosed 8 years ago; managed with Metformin (500mg twice daily).
+Hyperlipidemia: Diagnosed 5 years ago; on Atorvastatin (20mg daily).
+Family History: Father died of myocardial infarction at age 62; mother has type 2 diabetes.
+Clinical Findings
+Vital Signs on Admission: BP 150/95 mmHg, HR 98 bpm, RR 22/min, O2 Saturation 92% on room air, Temperature 37.2°C.
+Physical Examination: Normal heart sounds, mild bilateral ankle edema, clear lung sounds.
+Investigations
+Blood Tests:
+
+Troponin T: Elevated (0.56 ng/mL; normal <0.01 ng/mL).
+HbA1c: 8.1% (poor glycemic control).
+Lipid Profile: Total Cholesterol 260 mg/dL, LDL 180 mg/dL, HDL 40 mg/dL, Triglycerides 210 mg/dL.
+ECG: ST-elevation in leads II, III, and aVF, indicating an inferior myocardial infarction.
+
+Echocardiogram: Mildly reduced left ventricular ejection fraction (LVEF 45%).
+
+Coronary Angiography: 80% stenosis in the right coronary artery (RCA), 50% stenosis in the left anterior descending artery (LAD).
+
+Management
+Acute Management: The patient was immediately given aspirin (300mg), clopidogrel (300mg), and a high-dose statin. Nitroglycerin was administered to relieve chest pain, and oxygen therapy was provided.
+Percutaneous Coronary Intervention (PCI): Successfully performed on January 16, 2025, with the placement of a drug-eluting stent in the RCA.
+Medications on Discharge:
+Aspirin 75mg daily.
+Clopidogrel 75mg daily.
+Atorvastatin 40mg daily.
+Metoprolol 50mg twice daily.
+Lisinopril 10mg daily.
+Metformin 500mg twice daily.
+Discharge Plan
+Follow-up with a cardiologist in 2 weeks.
+Lifestyle modifications: Low-sodium, low-fat diet; regular moderate exercise; smoking cessation.
+Monitor blood glucose at home and report any abnormal values.
+Adherence to medication regimen is essential.
+Conclusion
+The patient was diagnosed with an inferior myocardial infarction secondary to coronary artery disease. They responded well to PCI and medication, and no complications were observed during hospitalization.
+
+Instructions for the Patient:
+
+Report immediately if symptoms like chest pain, shortness of breath, or dizziness recur.
+Continue all prescribed medications and attend follow-ups as scheduled.

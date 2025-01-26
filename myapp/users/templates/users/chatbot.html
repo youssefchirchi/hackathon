@@ -1,174 +1,274 @@
-{% load static %}
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Assistant</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Health Companion: Medical Information Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         :root {
-            --primary-blue: #2196F3;
-            --light-blue: #E3F2FD;
-            --dark-blue: #1565C0;
-            --white: #FFFFFF;
+            /* Color Palette */
+            --primary-blue: #2196F3;        /* Vibrant professional blue */
+            --white: #FFFFFF;               /* Pure white */
+            --text-blue: #1565C0;           /* Deep blue for text */
+            --light-blue: #E3F2FD;          /* Light blue accent */
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light-blue);
-            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            line-height: 1.6;
+            color: var(--text-blue);
         }
 
-        .chat-container {
-            max-width: 600px;
-            margin: 50px auto;
+        #chat-container {
+            width: 450px;
+            height: 650px;
             background-color: var(--white);
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
         }
 
-        .chat-header {
+        #chat-header {
             background-color: var(--primary-blue);
             color: var(--white);
-            padding: 20px;
-            text-align: center;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        #chatbox {
-            height: 400px;
-            overflow-y: auto;
-            padding: 20px;
+        #chat-header h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            flex-grow: 1;
+        }
+
+        #chat-header i.fa-medical-icon {
+            margin-right: 10px;
+            font-size: 1.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phone-circle {
             background-color: var(--white);
+            color: var(--primary-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        #chat-history {
+        .home-btn {
+            background-color: var(--white);
+            color: var(--primary-blue);
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .home-btn:hover {
+            background-color: var(--light-blue);
+        }
+
+        #messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: var(--white);
             display: flex;
             flex-direction: column;
         }
 
-        .user-message, .bot-message {
+        .message {
             max-width: 80%;
             margin: 10px 0;
-            padding: 10px 15px;
-            border-radius: 15px;
+            padding: 12px;
+            border-radius: 10px;
             clear: both;
-        }
-
-        .bot-message {
-            background-color: var(--light-blue);
-            align-self: flex-start;
+            word-wrap: break-word;
         }
 
         .user-message {
+            background-color: var(--light-blue);
+            color: var(--text-blue);
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        .bot-message {
             background-color: var(--primary-blue);
             color: var(--white);
-            align-self: flex-end;
+            align-self: flex-start;
         }
 
-        .chat-input-area {
+        #chat-form {
             display: flex;
-            padding: 20px;
+            padding: 15px;
             background-color: var(--light-blue);
+            border-top: 1px solid #e0e0e0;
         }
 
-        #user-input {
+        #message-input {
             flex-grow: 1;
+            padding: 10px;
+            border: 1px solid var(--primary-blue);
+            border-radius: 5px;
             margin-right: 10px;
-            border: 2px solid var(--primary-blue);
         }
 
-        #send-button {
+        #chat-form button {
             background-color: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transition: all 0.3s ease;
+            color: var(--white);
+            border: none;
+            border-radius: 5px;
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: background-color 0.3s ease;
         }
 
-        #send-button:hover {
-            background-color: var(--dark-blue);
+        #chat-form button:hover {
+            background-color: var(--text-blue);
         }
     </style>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="chat-container">
-            <div class="chat-header">
-                <h2 class="mb-0">Chatbot Assistant</h2>
-            </div>
-            
-            <div id="chatbox">
-                <div id="chat-history">
-                    <div class="bot-message">
-                        Bonjour! Comment puis-je vous aider aujourd'hui ?
-                    </div>
+    <div id="chat-container">
+        <div id="chat-header">
+            <h3>
+                <i class="fas fa-user-md fa-medical-icon"></i>
+                Health Companion Assistant
+            </h3>
+            <div class="header-actions">
+                <div class="phone-circle">
+                    <i class="fas fa-phone"></i>
                 </div>
-            </div>
-            
-            <div class="chat-input-area">
-                <input type="text" id="user-input" class="form-control" placeholder="Entrez votre message...">
-                <button id="send-button" class="btn btn-primary">
-                    <i class="fas fa-paper-plane"></i>
+                <button class="home-btn" onclick="window.location.href='{% url 'normal_user_dashboard' %}'" title="Return to Home">
+                    <i class="fas fa-home"></i>
                 </button>
             </div>
         </div>
+        <div id="messages"></div>
+        <div id="chat-form">
+            <input type="text" id="message-input" placeholder="Ask a health-related question...">
+            <button id="send-button" onclick="sendMessage()">
+                Send <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    
     <script>
-        // Pass chatbot data from Django template
-        const chatbotData = {{ chatbot_data|safe }};
+        async function sendMessage() {
+            const messageInput = document.getElementById("message-input");
+            const messagesContainer = document.getElementById("messages");
 
-        $(document).ready(function() {
-            function addMessage(message, type) {
-                const messageElement = $(`<div class="${type}-message">`).text(message);
-                $('#chat-history').append(messageElement);
-                $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+            const userMessage = messageInput.value.trim();
+            if (!userMessage) return;
+
+            // User message
+            const userMessageEl = document.createElement("div");
+            userMessageEl.className = "message user-message";
+            userMessageEl.textContent = userMessage;
+            messagesContainer.appendChild(userMessageEl);
+
+            // Clear input
+            messageInput.value = "";
+
+            // Simulate typing
+            const typingIndicator = document.createElement("div");
+            typingIndicator.className = "message bot-message";
+            typingIndicator.innerHTML = '<i class="fas fa-ellipsis-h"></i>';
+            messagesContainer.appendChild(typingIndicator);
+
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            try {
+                // Send message to server
+                const response = await fetch("/send_message/", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                        "X-CSRFToken": getCSRFToken()
+                    },
+                    body: new URLSearchParams({ message: userMessage })
+                });
+
+                // Remove typing indicator
+                messagesContainer.removeChild(typingIndicator);
+
+                const data = await response.json();
+
+                // Bot response
+                const botMessageEl = document.createElement("div");
+                botMessageEl.className = "message bot-message";
+                botMessageEl.textContent = data.reply;
+                messagesContainer.appendChild(botMessageEl);
+
+                // Scroll to bottom
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            } catch (error) {
+                console.error("Error:", error);
+                // Remove typing indicator
+                messagesContainer.removeChild(typingIndicator);
+
+                // Error message
+                const errorMessageEl = document.createElement("div");
+                errorMessageEl.className = "message bot-message";
+                errorMessageEl.textContent = "Sorry, there was an error processing your message. Please try again.";
+                messagesContainer.appendChild(errorMessageEl);
             }
+        }
 
-            function findBestResponse(userMessage) {
-                // Implement fuzzy matching or more advanced logic
-                const normalizedMessage = userMessage.toLowerCase();
-                
-                for (let item of chatbotData) {
-                    const normalizedQuestion = item.question.toLowerCase();
-                    if (normalizedMessage.includes(normalizedQuestion)) {
-                        return item.response;
-                    }
-                }
-                
-                return "Je n'ai pas compris votre message. Pouvez-vous préciser?";
+        function getCSRFToken() {
+            return document.cookie
+                .split("; ")
+                .find(row => row.startsWith("csrftoken"))
+                ?.split("=")[1];
+        }
+
+        function returnHome() {
+            // Implement home button functionality
+            window.location.href = "/"; // Redirect to home page
+        }
+
+        // Optional: Add Enter key support
+        document.getElementById("message-input").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                sendMessage();
             }
-
-            function sendMessage() {
-                const userMessage = $('#user-input').val().trim();
-                if (userMessage === '') return;
-
-                // Add user message
-                addMessage(userMessage, 'user');
-                
-                // Find and add bot response
-                const botResponse = findBestResponse(userMessage);
-                
-                // Add bot message
-                setTimeout(() => {
-                    addMessage(botResponse, 'bot');
-                }, 1000);
-
-                // Clear input
-                $('#user-input').val('');
-            }
-
-            // Send message on button click
-            $('#send-button').click(sendMessage);
-
-            // Send message on Enter key
-            $('#user-input').keypress(function(e) {
-                if (e.which === 13) {
-                    sendMessage();
-                }
-            });
         });
     </script>
 </body>

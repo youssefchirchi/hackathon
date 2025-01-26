@@ -12,3 +12,10 @@ class CustomLoginForm(AuthenticationForm):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Username'})
         self.fields['password'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Password'})
+
+
+
+from django import forms
+
+class MessageForm(forms.Form):
+    message = forms.CharField(widget=forms.Textarea(attrs={'rows': 5, 'cols': 50}), label="Entrez votre message")

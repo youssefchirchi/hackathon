@@ -169,3 +169,220 @@ def chatbot(request):
     # Convert data to JSON string for JavaScript
     chatbot_data_json = json.dumps(chatbot_data)
     return render(request, 'users/chatbot.html', {'chatbot_data': chatbot_data_json})
+
+
+
+
+
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+import torch
+from PIL import Image, ImageOps
+import torchvision.transforms as transforms
+
+def predict_image_class_1(image_path, model_path=r"C:\Users\mhgui\Downloads\hackathon-main\hackathon-main\myapp\users\trained_model_full.pth", class_labels=None):
+    """
+    Predicts the class of an image using a pre-trained model.
+    """
+    # Load the model
+    model = torch.load(model_path, weights_only=False)
+    model.eval()
+
+    # Load and preprocess the image
+    image = Image.open(image_path).convert("RGB")
+    image = ImageOps.grayscale(image)
+
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize(mean=[0.5], std=[0.5])
+    ])
+
+    input_image = transform(image).unsqueeze(0)
+
+    # Perform prediction
+    with torch.no_grad():
+        output = model(input_image)
+
+    _, predicted_class = torch.max(output, 1)
+
+    # Define default class labels if not provided
+    if class_labels is None:
+        class_labels = ['AbdomenCT', 'BreastMRI', 'ChestCT', 'CXR', 'HeadCT', 'Hand']
+
+    predicted_label = class_labels[predicted_class.item()]
+    return predicted_label
+
+
+def modele1(request):
+    """
+    Handles the image upload, predicts its class, and renders the result.
+    """
+    if request.method == 'POST' and request.FILES['image']:
+        uploaded_file = request.FILES['image']
+
+        # Save the uploaded file to the media folder
+        fs = FileSystemStorage()
+        filename = fs.save(uploaded_file.name, uploaded_file)
+
+        # Get the absolute file path for processing
+        image_path = fs.path(filename)  # Absolute path for the file
+        file_url = fs.url(filename)  # URL to display the file in the template
+
+        # Predict the class of the uploaded image
+        predicted_label = predict_image_class_1(image_path)
+
+        return render(request, 'users/modele1.html', {
+            'file_url': file_url,
+            'predicted_label': predicted_label
+        })
+
+    return render(request, 'users/modele1.html')
+
+
+
+
+
+
+
+from transformers import pipeline
+
+def summarize_text(text_file_path, model_path=None, max_length=130, min_length=30, do_sample=False):
+    """
+    Summarizes the text from a file using a pre-trained model.
+    """
+    # Load summarization pipeline
+    summarizer = pipeline("summarization", model=model_path) if model_path else pipeline("summarization")
+
+    # Read text from the file
+    with open(text_file_path, "r", encoding="utf-8") as file:
+        text = file.read()
+
+    # Perform summarization
+    summary = summarizer(text, max_length=max_length, min_length=min_length, do_sample=do_sample)
+
+    # Extract and return the summary text
+    return summary[0]['summary_text']
+
+
+
+def modele2(request):
+    """
+    Handles the file upload, summarizes its content, and renders the result.
+    """
+    if request.method == 'POST' and request.FILES['text_file']:
+        uploaded_file = request.FILES['text_file']
+
+        # Save the uploaded file to the media folder
+        fs = FileSystemStorage()
+        filename = fs.save(uploaded_file.name, uploaded_file)
+
+        # Get the absolute file path for processing
+        file_path = fs.path(filename)  # Absolute path for the file
+        file_url = fs.url(filename)  # URL to display the file in the template
+
+        # Summarize the text from the uploaded file
+        summary = summarize_text(file_path)
+
+        return render(request, 'users/modele2.html', {
+            'file_url': file_url,
+            'summary': summary
+        })
+
+    return render(request, 'users/modele2.html')
+
+
+
+
+
+# views.py
+from django.http import JsonResponse
+from django.shortcuts import render
+import requests
+import json
+
+def chatbot(request):
+    return render(request, "users/chatbot.html")
+
+def send_message(request):
+    if request.method == "POST":
+        message = request.POST.get("message")
+        
+        # Détails de l'API Langflow
+        BASE_API_URL = "http://127.0.0.1:7860"
+        FLOW_ID = "726f22c1-ad7e-468f-9acf-3ce5be9fb608"
+        ENDPOINT = f"{BASE_API_URL}/api/v1/run/{FLOW_ID}"
+
+        # Corps de la requête
+        payload = {
+            "input_value": message,
+            "output_type": "chat",
+            "input_type": "chat"
+        }
+
+        try:
+            response = requests.post(ENDPOINT, json=payload)
+            response_data = response.json()
+
+            # Extraction du texte de la réponse
+            reply = response_data["outputs"][0]["outputs"][0]["results"]["message"]["text"]
+            return JsonResponse({"reply": reply})
+        except Exception as e:
+            return JsonResponse({"reply": "Une erreur s'est produite lors du traitement de votre message."})
+
+    return JsonResponse({"reply": "Invalid request."})
+
+
+
+
+
+
+
+
+
+
+
+
+
+import json
+import requests
+from django.http import JsonResponse
+from django.shortcuts import render
+
+BASE_API_URL = "http://127.0.0.1:7860"
+FLOW_ID = "e4c85067-e768-4e5f-9919-7a8d414265bc"
+
+def run_flow(message: str):
+    """
+    Appelle l'API LangFlow et récupère la réponse.
+    """
+    api_url = f"{BASE_API_URL}/api/v1/run/{FLOW_ID}"
+    payload = {
+        "input_value": message,
+        "output_type": "chat",
+        "input_type": "chat",
+    }
+
+    try:
+        response = requests.post(api_url, json=payload)
+        response.raise_for_status()
+        return response.json()
+    except requests.RequestException as e:
+        return {"error": str(e)}
+
+def modele3(request):
+    """
+    Gère les requêtes pour le chatbot.
+    """
+    if request.method == "POST":
+        message = request.POST.get("message")
+        if message:
+            api_response = run_flow(message)
+            result = (
+                api_response.get("outputs", [{}])[0]
+                .get("outputs", [{}])[0]
+                .get("results", {})
+                .get("message", {})
+                .get("text", "Erreur dans la réponse.")
+            )
+            return JsonResponse({"response": result})
+    return render(request, "users/modele3.html")
